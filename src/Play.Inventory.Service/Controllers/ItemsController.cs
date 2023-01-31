@@ -35,7 +35,7 @@ namespace Play.Inventory.Service.Controllers
         [HttpPost]
         public async Task<ActionResult> PostAsync(GrantItemsDto grantItemsDto)
         {
-            var inventoryItem = await itemsRepository.GetAsync(item => item.Id == grantItemsDto.CatalogItemId && item.UserId == grantItemsDto.UserId);
+            var inventoryItem = await itemsRepository.GetAsync(item => item.CatalogItemId == grantItemsDto.CatalogItemId && item.UserId == grantItemsDto.UserId);
 
             if(inventoryItem is null)
             {
