@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Play.Common;
+using Play.Inventory.Service.Clients;
 using Play.Inventory.Service.Dtos;
 using Play.Inventory.Service.Entities;
 
@@ -14,22 +15,31 @@ namespace Play.Inventory.Service.Controllers
     public class ItemsController : ControllerBase
     {
         private readonly IRepository<InventoryItem> itemsRepository;
-        public ItemsController(IRepository<InventoryItem> itemsRepository)
+        private readonly CatalogClient catalogClient;
+        public ItemsController(IRepository<InventoryItem> itemsRepository, CatalogClient catalogClient)
         {
-            this.itemsRepository = itemsRepository;            
+            this.catalogClient = catalogClient;
+            this.itemsRepository = itemsRepository;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<InventoryItemDto>>> GetAsync(Guid userId)
         {
-            if(userId == Guid.Empty) return BadRequest();
+            if (userId == Guid.Empty) return BadRequest();
 
-            var items = (await itemsRepository.GetAllAsync(item => item.UserId == userId))
-                            .Select(item => item.AsDto());
+            var catalogItems = await catalogClient.GetCatalogItemsAsync();
 
-            if(items is null) return NotFound();
+            var inventoryItemEntities = await itemsRepository.GetAllAsync(i => i.UserId == userId);
 
-            return Ok(items);
+            var inventoryItemDtos = inventoryItemEntities.Select(inventoryItem => 
+            {
+                var catalogItem = catalogItems.Single(catalogItem => catalogItem.Id == inventoryItem.CatalogItemId);
+                return inventoryItem.AsDto(catalogItem.Name, catalogItem.Description);
+            });
+
+            if (inventoryItemDtos is null) return NotFound();
+
+            return Ok(inventoryItemDtos);
         }
 
         [HttpPost]
@@ -37,7 +47,7 @@ namespace Play.Inventory.Service.Controllers
         {
             var inventoryItem = await itemsRepository.GetAsync(item => item.CatalogItemId == grantItemsDto.CatalogItemId && item.UserId == grantItemsDto.UserId);
 
-            if(inventoryItem is null)
+            if (inventoryItem is null)
             {
                 inventoryItem = new InventoryItem
                 {
