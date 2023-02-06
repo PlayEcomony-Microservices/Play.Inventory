@@ -1,14 +1,21 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Play.Common.MongoDB;
+using Play.Inventory.Service.Clients;
 using Play.Inventory.Service.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMongo().AddMongoRepository<InventoryItem>("inventoryitems");
+
+builder.Services.AddHttpClient<CatalogClient>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:5001");
+});
 
 builder.Services.AddControllers(options =>
 {

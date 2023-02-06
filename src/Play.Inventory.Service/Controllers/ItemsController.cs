@@ -34,6 +34,7 @@ namespace Play.Inventory.Service.Controllers
             var inventoryItemDtos = inventoryItemEntities.Select(inventoryItem => 
             {
                 var catalogItem = catalogItems.Single(catalogItem => catalogItem.Id == inventoryItem.CatalogItemId);
+                            
                 return inventoryItem.AsDto(catalogItem.Name, catalogItem.Description);
             });
 
