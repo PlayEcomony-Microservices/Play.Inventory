@@ -22,7 +22,7 @@ builder.Services.AddMongo()
                 .AddMongoRepository<CatalogItem>("catalogitems")
                 .AddMassTransitWithRabbitMq();
 
-// AddCatalogClient(services);
+AddCatalogClient(services);
 
 builder.Services.AddControllers(options =>
 {
