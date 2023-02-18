@@ -15,7 +15,10 @@ using Polly.Timeout;
 using Play.Common.MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
+var Configuration = builder.Configuration;
 var services = builder.Services;
+
+const string AllowedOriginSetting = "AllowedOrigin";
 
 builder.Services.AddMongo()
                 .AddMongoRepository<InventoryItem>("inventoryitems")
@@ -48,6 +51,13 @@ if (app.Environment.IsDevelopment())
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Play.Catalog.Service v1");
         c.RoutePrefix = string.Empty;
+    });
+
+    app.UseCors(options =>
+    {
+        options.WithOrigins(Configuration[AllowedOriginSetting])
+                .AllowAnyHeader()
+                .AllowAnyMethod();
     });
 }
 
