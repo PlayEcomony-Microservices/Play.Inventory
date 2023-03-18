@@ -13,6 +13,7 @@ using Polly;
 using Microsoft.Extensions.Logging;
 using Polly.Timeout;
 using Play.Common.MassTransit;
+using Play.Common.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
@@ -23,7 +24,8 @@ const string AllowedOriginSetting = "AllowedOrigin";
 builder.Services.AddMongo()
                 .AddMongoRepository<InventoryItem>("inventoryitems")
                 .AddMongoRepository<CatalogItem>("catalogitems")
-                .AddMassTransitWithRabbitMq();
+                .AddMassTransitWithRabbitMq()
+                .AddJwtBearerAuthentication();
 
 AddCatalogClient(services);
 
@@ -65,6 +67,7 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
