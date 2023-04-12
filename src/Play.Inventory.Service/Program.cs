@@ -14,6 +14,8 @@ using Microsoft.Extensions.Logging;
 using Polly.Timeout;
 using Play.Common.MassTransit;
 using Play.Common.Identity;
+using MassTransit;
+using Play.Inventory.Service.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
@@ -24,7 +26,11 @@ const string AllowedOriginSetting = "AllowedOrigin";
 builder.Services.AddMongo()
                 .AddMongoRepository<InventoryItem>("inventoryitems")
                 .AddMongoRepository<CatalogItem>("catalogitems")
-                .AddMassTransitWithRabbitMq()
+                .AddMassTransitWithRabbitMq(retryConfigurator =>
+                {
+                    retryConfigurator.Interval(3, TimeSpan.FromSeconds(5));
+                    retryConfigurator.Ignore(typeof(UnknownItemException));
+                })
                 .AddJwtBearerAuthentication();
 
 AddCatalogClient(services);
