@@ -24,24 +24,17 @@ namespace Play.Inventory.Service.Consumers
 
             var item = await repository.GetAsync(message.ItemId);
 
-            if (item is null)
-            {
-                item = new CatalogItem
-                {
-                    Id = message.ItemId,
-                    Name = message.Name,
-                    Description = message.Description
-                };
+            if (item is not null) return;
 
-                await repository.CreateAsync(item);
-            }
-            else
+            item = new CatalogItem
             {
-                item.Name = message.Name;
-                item.Description = message.Description;
+                Id = message.ItemId,
+                Name = message.Name,
+                Description = message.Description
+            };
 
-                await repository.UpdateAsync(item);
-            }
+            await repository.CreateAsync(item);
+
         }
     }
 }
