@@ -10,15 +10,15 @@ using Play.Inventory.Service.Entities;
 
 namespace Play.Inventory.Service.Consumers
 {
-    public class CatalogItemUpdatedConsumer : IConsumer<CatalogItemUpdated>
+    public class CatalogItemCreatedConsumer : IConsumer<CatalogItemCreated>
     {
         private readonly IRepository<CatalogItem> repository;
 
-        public CatalogItemUpdatedConsumer(IRepository<CatalogItem> repository)
+        public CatalogItemCreatedConsumer(IRepository<CatalogItem> repository)
         {
             this.repository = repository;
         }
-        public async Task Consume(ConsumeContext<CatalogItemUpdated> context)
+        public async Task Consume(ConsumeContext<CatalogItemCreated> context)
         {
             var message = context.Message;
 
