@@ -16,6 +16,7 @@ using Play.Common.MassTransit;
 using Play.Common.Identity;
 using MassTransit;
 using Play.Inventory.Service.Exceptions;
+using GreenPipes;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
