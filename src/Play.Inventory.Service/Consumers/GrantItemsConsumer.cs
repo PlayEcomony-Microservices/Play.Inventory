@@ -40,11 +40,20 @@ namespace Play.Inventory.Service.Consumers
                     AcquiredDate = DateTimeOffset.UtcNow
                 };
 
+
                 await _inventoryItemsRepository.CreateAsync(inventoryItem);
             }
             else
             {
+                if(inventoryItem.MessageIds.Contains(context.MessageId.Value))
+                {
+                    await context.Publish(new InventoryItemsGranted(message.CorrelationId));
+                    return;
+                }
+
                 inventoryItem.Quantity += message.Quantity;
+                inventoryItem.MessageIds.Add(context.MessageId.Value);
+
                 await _inventoryItemsRepository.UpdateAsync(inventoryItem);
             }
 
