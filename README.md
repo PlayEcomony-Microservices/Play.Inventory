@@ -5,7 +5,7 @@ My second microservices in the Play-Economy project. All my inventory functional
 ## Create and Publish Play.Inventory.Contracts package to GitHub
 
 ```powershell
-$version="1.0.1"
+$version="1.0.2"
 $owner="PlayEcomony-Microservices"
 $gh_pat="[PAT HERE]"
 
@@ -25,6 +25,7 @@ docker build --secret id=GH_OWNER --secret id=GH_PAT -t play.inventory:$version 
 ## Run the docker image
 
 ```powershell
-$adminPass="[password here]"
-docker run -it --rm -p 5004:5004 --name inventory -e MongoDbSettings__Host=mongo -e RabbitMQSettings__Host=rabbitmq --network playinfra_default play.inventory:$version
+$cosmosDbConnStr="[CONN STRING HERE]"
+$serviceBusConnString="[CONN STRING HERE]"
+docker run -it --rm -p 5004:5004 --name inventory -e MongoDbSettings__ConnectionString=$cosmosDbConnStr -e ServiceBusSettings__ConnectionString=$serviceBusConnString -e ServiceSettings__MessageBroker="SERVICEBUS" --network playinfra_default play.inventory:$version
 ```
