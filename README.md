@@ -1,6 +1,6 @@
 # PlayEconomy.Play.Inventory
 
-My second microservices in the Play-Economy project. All my inventory functionality is in this microservice
+Microservice to facilitate inventory functionality to Play Econonmy.
 
 ## Create and Publish Play.Inventory.Contracts package to GitHub
 
