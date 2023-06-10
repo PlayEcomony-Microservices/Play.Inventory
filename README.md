@@ -1,6 +1,6 @@
 # PlayEconomy.Play.Inventory
 
-Microservice to facilitate inventory functionality to Play Econonmy.
+Microservice to facilitate inventory functionality to Play Economy.
 
 ## Create and Publish Play.Inventory.Contracts package to GitHub
 
