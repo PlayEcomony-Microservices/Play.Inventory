@@ -20,12 +20,12 @@ spec:
           - name: MongoDbSettings__ConnectionString
             valueFrom:
               secretKeyRef:
-                name: identity-secrets
+                name: inventory-secrets
                 key: cosmosdb-connectionstring
           - name: ServiceBusSettings__ConnectionString
             valueFrom:
               secretKeyRef:
-                name: identity-secrets
+                name: inventory-secrets
                 key: servicebus-connectionstring
         resources:
           limits:
