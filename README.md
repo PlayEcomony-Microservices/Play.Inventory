@@ -37,3 +37,22 @@ docker run -it --rm -p 5004:5004 --name inventory -e MongoDbSettings__Connection
 az acr login --name $acrName
 docker push "$acrName.azurecr.io/play.inventory:$version"
 ```
+
+## Create the Kubernetes namespace
+
+```powershell
+$namespace="inventory"
+kubectl create namespace $namespace
+```
+
+## Create the Kubernetes secrets
+
+```powershell
+kubectl create secret generic inventory-secrets --from-literal=cosmosdb-connectionstring=$cosmosDbConnStr --from-literal=servicebus-connectionstring=$serviceBusConnString -n $namespace
+```
+
+## Create the Kubernetes pod
+
+```powershell
+kubectl apply -f .\kubernetes\inventory.yaml -n $namespace
+```
