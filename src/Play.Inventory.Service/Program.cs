@@ -17,6 +17,7 @@ using Play.Common.Identity;
 using MassTransit;
 using Play.Inventory.Service.Exceptions;
 using GreenPipes;
+using Play.Common.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
@@ -49,6 +50,8 @@ builder.Services.AddSwaggerGen(c =>
 
 });
 
+builder.Services.AddHealthChecks().AddMongoDb();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -78,6 +81,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapPlayEconomyHealthChecks();
 
 app.Run();
 
