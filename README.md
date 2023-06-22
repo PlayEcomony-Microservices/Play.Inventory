@@ -5,7 +5,7 @@ Microservice to facilitate inventory functionality to Play Economy.
 ## Create and Publish Play.Inventory.Contracts package to GitHub
 
 ```powershell
-$version="1.0.2"
+$version="1.0.3"
 $owner="PlayEcomony-Microservices"
 $gh_pat="[PAT HERE]"
 
